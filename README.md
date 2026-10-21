@@ -4,6 +4,8 @@
 
 [Private live preview](https://axiom-intelligence.atifmahmood131.chatgpt.site)
 
+[Product and engineering guide (PDF)](docs/axiom-product-and-engineering-guide.pdf) - 12 illustrated pages covering features, design, architecture, setup, ROI calculations, and production integration.
+
 A working, configurable React 19 / Next.js 15 App Router starter for an AI operations platform. The interface combines an editorial marketing homepage with observability, developer, workflow, and pricing workspaces. TypeScript, Tailwind CSS 4, Framer Motion, and Lucide provide the component foundation.
 
 ## Start in three steps
