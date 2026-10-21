@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env*
+!.env.example
+test-results/
+
+# Local hosting identity belongs to each deployment, not the reusable template.
+.openai/

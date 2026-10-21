@@ -1,0 +1,311 @@
+.command-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid #343b40;
+  border-radius: 5px;
+  background: #14191b;
+  color: #b1bdba;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.command-trigger:hover {
+  background: #1b2722;
+  border-color: #658574;
+  color: #d9f4e5;
+}
+.command-trigger > span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+}
+.command-dialog {
+  padding: 0;
+  width: min(580px, calc(100vw - 32px));
+  max-height: min(720px, calc(100dvh - 48px));
+  margin: clamp(24px, 13vh, 130px) auto auto;
+  overflow: hidden;
+  border: 1px solid #45594e;
+  border-radius: 13px;
+  background: #111519;
+  color: #edf3ef;
+  box-shadow: 0 34px 120px #000b;
+}
+.command-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: command-enter 0.16s ease-out;
+}
+.command-dialog::backdrop {
+  background: #030507b8;
+  backdrop-filter: blur(8px);
+}
+.command-search {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 19px;
+  border-bottom: 1px solid #303b37;
+  flex-shrink: 0;
+  color: #b3d2c0;
+}
+.command-search input {
+  width: 100%;
+  padding: 7px 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-size: 14px;
+  color: #ecf1ee;
+  outline: none;
+}
+.command-search input:focus-visible {
+  outline: none;
+  box-shadow: 0 2px 0 #9df5ce;
+}
+.command-search input::-webkit-search-cancel-button {
+  display: none;
+}
+.command-search input::placeholder {
+  color: #a5b1ad;
+}
+.command-close {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #3b4842;
+  border-radius: 5px;
+  color: #b4bfb8;
+}
+.command-close:hover {
+  background: #29382f;
+  color: #e2f2e8;
+}
+.command-results-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 17px 22px 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  color: #a3b7ab;
+}
+.command-results-heading > span:last-child {
+  font-size: 9px;
+  letter-spacing: 0;
+  color: #a1aca6;
+}
+.command-results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 9px 10px;
+  min-height: 0;
+  scrollbar-color: #40554a #111519;
+}
+.command-result {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+.command-result-active {
+  background: #1c2a24;
+  border-color: #40594b;
+}
+.command-result-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #36433c;
+  background: #17211c;
+  color: #afd5bf;
+  border-radius: 7px;
+}
+.command-result-active .command-result-icon {
+  background: #294333;
+  border-color: #5a7a64;
+  color: #bef8d8;
+}
+.command-result-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.command-result-copy strong {
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  color: #e5eee8;
+}
+.command-result-copy small {
+  font-size: 10px;
+  line-height: 1.5;
+  color: #a7b4ac;
+}
+.command-result > svg {
+  margin-left: auto;
+  color: #a4b9ad;
+}
+.command-result-active > svg {
+  color: #b5f5d0;
+}
+.command-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 34px 20px 43px;
+  gap: 13px;
+  text-align: center;
+}
+.command-empty > svg {
+  color: #98b4a3;
+  margin-bottom: 5px;
+}
+.command-empty strong {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.command-empty p {
+  font-size: 12px;
+  color: #a4b0a9;
+}
+.command-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+  padding: 13px 21px;
+  border-top: 1px solid #2f3a34;
+  background: #0e1410;
+  color: #a3b4a9;
+  font-size: 9px;
+}
+.command-footer > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.command-footer kbd {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 16px;
+  min-width: 17px;
+  padding: 0 3px;
+  text-align: center;
+  background: #1d2821;
+  border: 1px solid #425249;
+  border-radius: 3px;
+  color: #c8d8cf;
+}
+.command-footer kbd:nth-of-type(3) {
+  margin-left: 7px;
+}
+.command-footer > span:last-child > kbd {
+  margin-left: 8px;
+}
+@keyframes command-enter {
+  from {
+    opacity: 0.5;
+    transform: translateY(-7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 850px) {
+  .command-trigger {
+    min-width: 32px;
+    padding: 7px;
+  }
+  .command-trigger > span {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .command-dialog {
+    margin-top: 24px;
+    border-radius: 9px;
+    max-height: calc(100dvh - 48px);
+  }
+  .command-search {
+    gap: 9px;
+    padding: 14px;
+  }
+  .command-search > svg {
+    width: 16px;
+  }
+  .command-search input {
+    font-size: 12px;
+  }
+  .command-results-heading {
+    padding: 15px 17px 8px;
+    font-size: 8px;
+  }
+  .command-results-heading > span:last-child {
+    font-size: 8px;
+  }
+  .command-result {
+    padding: 11px 8px;
+    gap: 10px;
+  }
+  .command-result-copy strong {
+    font-size: 12px;
+  }
+  .command-result-copy small {
+    font-size: 10px;
+  }
+  .command-result-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .command-result > svg {
+    width: 13px;
+  }
+  .command-footer {
+    padding: 12px 14px;
+    font-size: 8px;
+    gap: 8px;
+  }
+  .command-footer > span {
+    gap: 4px;
+  }
+  .command-footer > span:last-child > svg {
+    display: none;
+  }
+  .command-footer > span:last-child > kbd {
+    margin-left: 3px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .command-dialog[open] {
+    animation: none;
+  }
+  .command-trigger,
+  .command-result {
+    transition: none;
+  }
+}
