@@ -1,0 +1,2 @@
+# Optional documentation tooling; not needed by the application runtime.
+reportlab==4.4.9

@@ -1,103 +1,56 @@
-# Accessibility implementation and verification
+# Intelligence OS accessibility
 
-## Standard and current evidence
+WCAG 2.2 Level AA is the design target. This implementation has passed the automated checks described below; **it is not a WCAG certification or a completed manual accessibility audit**. The checks apply to the tested application states, not every report a customer may embed.
 
-The design target is WCAG 2.2 Level AA. This guide describes implementation intent and release checks; it is not a conformance certificate or a completed independent audit. Unit tests for math and graph rules do not verify browser semantics, contrast, screen-reader behavior, or keyboard usability. Record actual browser and assistive-technology results before claiming compliance.
+## Recorded evidence: 2026-10-23
 
-The reference uses semantic navigation and forms, a skip link, visible labels, native dialogs, reduced-motion awareness, chart summaries/data tables, and keyboard controls for operational interactions. Verify these behaviors after changing content, components, routes, or CSS. Native HTML provides a foundation, but incorrect labels, duplicate IDs, hidden focus, and unsupported interaction patterns can still create barriers.
+The production Playwright suite passed five tests using local Chromium. Its accessibility test loaded all eight protected workspace sections: overview, datasets, analyst, lab, catalog, evaluations, reports and governance. axe-core reported **zero detected violations** using `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` and `wcag22aa` tags at 1440 × 1000 CSS px.
 
-## Interaction specifications
+The same eight routes had no document-level horizontal overflow at 320, 1440 and 3840 CSS px. A browser journey exercised Ctrl+K, search input and Enter navigation. Other journeys opened a metric definition, used labeled filters, completed an upload/transformation/analysis flow, and confirmed disabled viewer actions. These checks do not establish complete keyboard navigation, zoom/reflow, screen-reader or live Power BI report accessibility.
 
-| Surface | Keyboard contract | Nonvisual / semantic contract |
-| --- | --- | --- |
-| Shared navigation | Tab reaches links and controls in visual order; skip link moves to main content | Active route is identified; menu controls expose expanded state; links have clear purposes |
-| Command palette | Cmd/Ctrl+K opens; Up/Down selects; Enter navigates; Escape closes and restores focus | Search input, result list, selection, empty state, and dialog title are named |
-| Workspace selector | Selection works with keyboard and a visible focus state | Label identifies workspace; new context is clear without relying on color |
-| Hero and ambient network | Main actions remain reachable independently of the graphic; motion can be paused where applicable | Decorative geometry stays out of the accessibility tree; textual status explains meaning |
-| Lead capture | Enter submits; errors retain entered text; dialog closes with Escape; focus returns to opener | Every field has an associated label; invalid input describes the error; confirmation states that the brief is local |
-| Native dialog | Focus enters a meaningful control, stays inside while open, and returns on close | Dialog has an accessible name; background is inert; close button has a specific name |
-| Case studies | Button opens/closes details without pointer hover | Expanded state is exposed; example outcomes are identified as illustrative |
-| Chart range controls | Button group is operable by Tab and Enter/Space | Selected range is communicated with `aria-pressed` or equivalent native selection |
-| Telemetry chart | Focus enters the selected point; arrows, Home, End navigate the series | Point labels provide time, request count, and latency; the data table supplies exact values |
-| Drift diagnostics | Model selection works without pointing at small dots | Model, drift, bias, units, and example threshold have text equivalents |
-| Developer language controls | Keyboard selects each language; copied/run state is perceivable | Selected language is exposed; terminal is readable text; simulation is labeled |
-| Key actions | Create/copy/revoke controls have clear names; confirmation is understandable | Credential lifecycle feedback does not expose real secrets in persistent announcements |
-| Workflow nodes | Nodes can be selected/configured without dragging; provided arrows or controls move them | Node name, role, connections, and selection state are available outside decorative edges |
-| Workflow connections | Explicit controls select source/target and create/remove edges | Invalid edges produce actionable text; drawing alone is not the only representation |
-| Workflow run | Run feedback does not trap focus or force focus on every event | Status updates are summarized through a polite region; simulated execution is explicit |
-| Pricing period | Monthly/annual choices work with keyboard and expose selection | Price and billing cadence change together; annual equivalent is explained |
-| ROI controls | Number fields offer direct input in addition to sliders; keyboard increments work | Units, limits, assumptions, and signed results are readable; invalid input remains recoverable |
-| SLA details | Trigger, close, and all content are keyboard reachable | Accessible title identifies the example terms; no signed agreement is implied |
+## Implemented interaction contracts
 
-Avoid adding `role="tab"` unless implementing the complete tab keyboard model, including arrow navigation, selected state, controlled panel IDs, and appropriate tab stops. A labeled group of native buttons with `aria-pressed` is often sufficient for a short filter. Every SVG element exposed as an interactive button must have a usable focus state and an activation contract.
+| Surface              | Keyboard and semantic behavior                                                                                    | Verification boundary                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Workspace shell      | Labeled navigation, current-route state, labeled workspace selector, visible focus styling                        | Default routes scanned; exhaustive focus order and mobile navigation require manual review                      |
+| Command search       | Cmd/Ctrl+K opens a native dialog; input supports Up/Down and Enter; Escape closes                                 | Ctrl+K/search/Enter exercised; screen-reader selection announcements and focus restoration remain manual checks |
+| Date/segment filters | Labeled native inputs/selects                                                                                     | Used in browser journeys; invalid-date and error feedback need assistive-technology review                      |
+| Metric definitions   | Keyboard-operable metric button opens a native dialog with definition, units and limitations                      | Open/close journey exercised; every definition's spoken experience remains unverified                           |
+| Revenue chart        | Focusable chart group; Left/Right/Home/End point inspection; exact values in a polite readout; chart/table toggle | Default state scanned; complete keyboard/chart-table parity needs manual checking                               |
+| Chart legends        | Named native buttons expose selection through `aria-pressed`                                                      | Color is supplemented by names and exact-value tables                                                           |
+| Panel width          | Native range input provides a keyboard alternative to pointer adjustment                                          | Manual touch/keyboard sizing and focus visibility remain to check                                               |
+| Data workbench       | Labeled file input, transformation review and explicit publication action; bounded table previews                 | Upload/review/publish journey passed; complex parser-error states need review                                   |
+| Analyst              | Labeled question/dataset inputs; textual answer facts, query and provenance; saved-analysis feedback              | Tested with an uploaded dataset; long responses and service-error announcements need review                     |
+| Analysis lab         | Native method buttons expose selection; tables accompany statistical output and limitations                       | Forecast/cohort views exercised; all method-specific results need manual review                                 |
+| Evaluations          | Labeled run/comparison/category selectors; pass/fail/incomplete labels accompany colors                           | Default view scanned; no claim about every possible failure combination                                         |
+| Governance           | Named role and cancellation controls; viewer actions disabled; textual audit/job state                            | Default route and viewer restrictions exercised                                                                 |
+| Power BI             | Labeled local preview and SDK host with connection/error states                                                   | Only the local preview was scanned; live report visuals, focus and export behavior remain unverified            |
 
-## Visual requirements
+The original public template retains its keyboard workflow controls, pricing calculator, developer examples and reduced-motion behavior. Previous v1 checks do not replace a new manual regression pass after customizing those surfaces.
 
-- Text contrast: at least 4.5:1 for normal text and 3:1 for large text. Large means at least 24 CSS px regular or approximately 18.66 CSS px bold.
-- Essential control boundaries, icons, selected states, and focus indicators: at least 3:1 against adjacent colors when required by WCAG non-text contrast criteria. Decorative hairlines are not essential state indicators.
-- Status must use labels, icons, line patterns, or shapes in addition to hue. Mint/violet chart lines need legends and exact-value alternatives.
-- Maintain visible keyboard focus and ensure sticky headers, dialogs, and overflow containers do not obscure the focused control.
-- Target sizes should be at least 24 × 24 CSS px or satisfy WCAG's spacing/exception rules; prefer 44 × 44 px for primary touch controls.
-- Reflow to 320 CSS px without page-level horizontal scrolling, except content that inherently requires two dimensions. Charts, tables, code, and a node graph may use clearly bounded internal scrolling.
-- At 200% text zoom, labels, forms, navigation, and dialogs must stay usable. Test 400% page zoom on a 1280 px viewport for the equivalent 320 px reflow case.
-- Do not use tiny uppercase text for essential instructions. Avoid truncating data without an accessible full value.
+## Visual and motion requirements
 
-Measure the final composited colors, including opacity, gradients, and disabled states. Passing the nominal text token against the nominal background is insufficient if the actual component adds transparency. A stronger border on hover does not replace a visible keyboard focus indicator.
+Maintain at least 4.5:1 text contrast for ordinary text and 3:1 for large text, and applicable 3:1 non-text contrast for essential controls and focus indicators. Measure final composited colors, including opacity and gradients; a nominal token pairing is not enough. Keep status labels and numerical alternatives so color is never the only source of meaning.
 
-## Motion and live updates
+Visible focus must remain unobscured by sticky headers, dialogs or internal scrolling. Aim for 44 × 44 CSS px touch controls; verify the WCAG 2.2 target-size minimum/spacing rules where smaller targets are necessary. Tables, code and charts can have bounded internal horizontal scrolling, while navigation/forms should reflow to 320 CSS px.
 
-Respect `prefers-reduced-motion` in CSS and in Framer Motion. Reduced motion should remove ambient rotation, looping translations, spatial parallax, and nonessential entrance transitions while preserving functional feedback. Do not make text or essential controls depend on an animation completing.
+Honor `prefers-reduced-motion` in CSS and motion components. Essential content must not depend on animation completing. Verify any retained continuously moving public-template content has the required pause/stop/hide behavior; reduced-motion support alone is not a substitute for every motion criterion.
 
-Automatically moving content that lasts more than five seconds needs a pause, stop, or hide mechanism when WCAG 2.2.2 applies; reduced-motion support alone is not a universal substitute. Verify ticker and network controls separately. Avoid flashing content. Pause expensive animation when its surface is offscreen and when the document is hidden as a performance improvement.
+Use polite live regions for discrete completion/status updates, and avoid announcing every chart frame or refresh. Errors should retain entered data and explain a recovery action. A screen reader must be able to distinguish unavailable values, zero, partial results and source freshness without interpreting color.
 
-Use `role="status"` or `aria-live="polite"` for discrete events such as save/copy completion. Avoid announcing every animation frame or rapidly changing telemetry point. Use `role="alert"` only for errors that need immediate attention. Keep prior results visible when a request fails and clearly mark stale data in a real integration.
+## Manual release checklist
 
-## Manual verification script
+Run against the production build, with representative data and user roles:
 
-Run against the production build in Chromium and Firefox, plus Safari where the intended audience uses it. Use an actual screen reader: NVDA with Firefox or Chrome, and VoiceOver with Safari. Browser accessibility-tree inspection does not replace listening to the experience.
+1. Complete sign-in, navigation, filtering, metric inspection, upload/review, analysis/save, evaluation and sign-out using only a keyboard. Check skip navigation, visible focus, Escape behavior and return focus after each dialog.
+2. Repeat with NVDA plus Firefox/Chrome and VoiceOver plus Safari. Listen to page/section names, control labels, table headers, status/error announcements and selected states. Browser accessibility-tree inspection is not equivalent to this check.
+3. Test 200% text zoom and 400% page zoom, long dataset/metric names, large/negative/missing numbers, long error messages and narrow viewports.
+4. Inspect reduced motion, forced-colors/high-contrast mode, keyboard chart reading and chart-to-table parity. Ensure legends and status do not require hue perception.
+5. Exercise empty, loading, permission-denied, partial, stale and failed-service states. Confirm no unexpected focus movement or content loss.
+6. Test small-target controls and internal table scrolling on actual touch devices. Verify usable touch targets and that focused content is not hidden.
+7. With provisioned Power BI, test report page/bookmark/slicer interactions, focus entry/exit, keyboard drill-through, token renewal and error recovery. Review the report author's own tab order, visual titles, alt text and color choices.
+8. Record browser/assistive-technology versions, viewport, role, scenario, expected behavior, actual result and remediation. Retest affected journeys after changes.
 
-1. **Page structure:** inspect each route for one clear H1, ordered section headings, named landmarks, page title, and a unique main target. Reach main content through the skip link.
-2. **Keyboard-only tour:** unplug the mouse or avoid it. Traverse all controls with Tab/Shift+Tab. Activate links and buttons. Check that focus is visible, orderly, and not trapped outside a modal.
-3. **Lead journey:** enter an invalid email, correct it, open the dialog, complete required fields, generate a local brief, close, and reopen. Verify error associations, dialog name, focus return, unique IDs, and no stale success state.
-4. **Observability:** change the range; navigate chart points with arrows/Home/End; read the accessible data table; switch drift models; export the sample CSV. Confirm axes, units, and the selected workspace are understandable.
-5. **Developer tools:** choose every language, read and copy the snippet, run the simulation, create a demo key, revoke it, and switch workspaces. Ensure feedback is announced without reading the full terminal repeatedly.
-6. **Workflow authoring:** select each blueprint; add/select/configure a node; reposition it without dragging; connect two nodes; attempt a cycle; remove a connection; undo/redo; export/import a valid definition; reject malformed input; save, reload, and simulate/stop a run. Reach a valid outcome using the keyboard alone.
-7. **Pricing and ROI:** switch billing periods; navigate the comparison; configure/download SLA requirements; select presets; save a scenario baseline; export CSV; input zero, the maximum, an empty field, a negative number, and a large value; review a scenario with negative savings if using custom rates.
-8. **Responsive/reflow:** test 320, 375, 768, 1280, and 1920 CSS px, then 200% and 400% zoom. Check nested scroll areas can be reached and used by keyboard. Test landscape mobile and large text settings.
-9. **Preferences:** enable reduced motion, forced colors/high contrast, and browser text spacing overrides. Confirm status and focus remain perceivable.
-10. **Content stress:** use long workspace names, long code lines, translated navigation labels, large currency values, missing data, and backend errors after integration.
+## Reproduce automated checks
 
-## Automated checks
-
-Run the repository checks first:
-
-```sh
-npm run typecheck
-npm test
-npm run build
-```
-
-For accessibility, run an axe-based browser audit against every route and important open state: mobile menu, lead dialog, pricing terms, expanded case study, workflow inspector, and accessible chart table. The package does not include an automated accessibility suite by default; install your chosen tooling in the downstream project and record its version. Automated tools detect only a subset of accessibility issues and cannot establish full WCAG conformance.
-
-Check duplicate IDs, accessible names, invalid ARIA, focus visibility, contrast, and document structure. Review rather than blindly dismiss rules involving SVG graphics, canvas, or color contrast. Every exception needs a human rationale and equivalent user access.
-
-## Evidence record
-
-Maintain a release record with the following fields:
-
-| Field | Record |
-| --- | --- |
-| Commit / build | Exact revision and build command |
-| Date / reviewer | Named reviewer and UTC date |
-| Routes and states | Include dialogs, expanded content, error states, and narrow layouts |
-| Browser / OS / AT | Versions and relevant settings |
-| Automated tooling | Tool/version, result, retained report |
-| Manual checks | Passed, failed, or not tested per scenario |
-| Findings | User impact, criterion, reproduction, remediation owner |
-| Retest | Fixed revision and verification result |
-
-Do not publish “WCAG 2.2 AA compliant” solely because these guidelines exist or an automated report has zero findings. Verify the complete user journeys and document remaining limitations.
-
-## Standard reference
-
-Use the [W3C WCAG 2.2 quick reference](https://www.w3.org/WAI/WCAG22/quickref/) to map observed behavior to the applicable success criteria. The implementation and this guide do not replace a conformance evaluation.
+With the seeded database, worker and production server running, run `npm run test:e2e`. The suite uses system Chromium if available, otherwise the installed Playwright browser. See `tests/e2e/workspace.spec.ts` for exact selectors and the tested state. A zero-violation result means no issues were detected by those rules in those states; it does not cover every WCAG success criterion.
