@@ -43,8 +43,8 @@ export function SiteHeader() {
             ))}
           </nav>
           <CommandPalette />
-          <Link href="/observability/" className="header-cta">
-            Open console <ArrowUpRight size={14} />
+          <Link href="/app/" className="header-cta">
+            Open workspace <ArrowUpRight size={14} />
           </Link>
           <button
             className="menu-toggle"

@@ -1,0 +1,28 @@
+{
+  "workspaceId": "REPLACE_WITH_CUSTOMER_POWERBI_WORKSPACE_UUID",
+  "profileId": "REPLACE_WITH_CUSTOMER_SERVICE_PRINCIPAL_PROFILE_UUID",
+  "reports": [
+    {
+      "key": "executive",
+      "name": "Executive intelligence",
+      "description": "Customer-specific approved report",
+      "reportId": "REPLACE_WITH_REPORT_UUID",
+      "datasetId": "REPLACE_WITH_SEMANTIC_MODEL_UUID",
+      "pages": [
+        "Executive Overview",
+        "Retention & Cohorts",
+        "Infrastructure Economics",
+        "Data Quality"
+      ],
+      "export": false,
+      "refresh": false,
+      "rlsRequired": true,
+      "identities": {
+        "REPLACE_WITH_AXIOM_USER_ID": {
+          "username": "approved-effective-identity",
+          "roles": ["RegionScope"]
+        }
+      }
+    }
+  ]
+}

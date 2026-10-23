@@ -1,0 +1,114 @@
+name: axiom-intelligence
+services:
+  postgres:
+    image: postgres:16-bookworm
+    mem_limit: 1g
+    cpus: 1.0
+    environment:
+      POSTGRES_DB: axiom
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run npm run setup}
+    ports: ["127.0.0.1:5436:5432"]
+    volumes: ["postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d axiom"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  init:
+    build: { context: ., target: worker }
+    env_file: .env
+    environment:
+      DATABASE_ADMIN_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/axiom
+      DATABASE_URL: postgresql://axiom_app:${APP_DB_PASSWORD}@postgres:5432/axiom
+      JOB_DATABASE_URL: postgresql://axiom_jobs:${JOB_DB_PASSWORD}@postgres:5432/axiom
+      PYTHON_BIN: /opt/venv/bin/python
+    command:
+      ["sh", "-c", "npx tsx scripts/migrate.ts && npx tsx scripts/seed.ts"]
+    depends_on:
+      postgres: { condition: service_healthy }
+  web:
+    build: { context: ., target: web }
+    mem_limit: 2g
+    cpus: 1.5
+    pids_limit: 128
+    environment:
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      AXIOM_MODE: ${AXIOM_MODE:-demo}
+      AXIOM_DEMO_LOGIN: ${AXIOM_DEMO_LOGIN:-false}
+      OIDC_ISSUER: ${OIDC_ISSUER:-}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:-}
+      AXIOM_ALLOW_INSECURE_OIDC: ${AXIOM_ALLOW_INSECURE_OIDC:-false}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      OPENAI_INPUT_USD_PER_MILLION: ${OPENAI_INPUT_USD_PER_MILLION:-}
+      OPENAI_OUTPUT_USD_PER_MILLION: ${OPENAI_OUTPUT_USD_PER_MILLION:-}
+      OPENAI_PRICE_CARD_VERSION: ${OPENAI_PRICE_CARD_VERSION:-}
+      AXIOM_GIT_SHA: ${AXIOM_GIT_SHA:-}
+      POWERBI_TENANT_ID: ${POWERBI_TENANT_ID:-}
+      POWERBI_CLIENT_ID: ${POWERBI_CLIENT_ID:-}
+      POWERBI_CLIENT_SECRET: ${POWERBI_CLIENT_SECRET:-}
+      POWERBI_CERTIFICATE_PATH: ${POWERBI_CERTIFICATE_PATH:-}
+      POWERBI_CERTIFICATE_THUMBPRINT: ${POWERBI_CERTIFICATE_THUMBPRINT:-}
+      DATABASE_URL: postgresql://axiom_app:${APP_DB_PASSWORD}@postgres:5432/axiom
+      JOB_DATABASE_URL: postgresql://axiom_jobs:${JOB_DB_PASSWORD}@postgres:5432/axiom
+      DATABASE_ADMIN_URL: ""
+      AXIOM_STORAGE_DIR: /app/.data
+      PYTHON_BIN: /opt/venv/bin/python
+      OIDC_INTERNAL_ORIGIN: http://keycloak:8080
+      HOSTNAME: 0.0.0.0
+    ports: ["127.0.0.1:3000:3000"]
+    volumes: ["artifacts:/app/.data"]
+    depends_on:
+      init: { condition: service_completed_successfully }
+  worker:
+    build: { context: ., target: worker }
+    mem_limit: 1536m
+    cpus: 1.0
+    pids_limit: 128
+    environment:
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      AXIOM_MODE: ${AXIOM_MODE:-demo}
+      AXIOM_DEMO_LOGIN: ${AXIOM_DEMO_LOGIN:-false}
+      OIDC_ISSUER: ${OIDC_ISSUER:-}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:-}
+      AXIOM_ALLOW_INSECURE_OIDC: ${AXIOM_ALLOW_INSECURE_OIDC:-false}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      OPENAI_INPUT_USD_PER_MILLION: ${OPENAI_INPUT_USD_PER_MILLION:-}
+      OPENAI_OUTPUT_USD_PER_MILLION: ${OPENAI_OUTPUT_USD_PER_MILLION:-}
+      OPENAI_PRICE_CARD_VERSION: ${OPENAI_PRICE_CARD_VERSION:-}
+      AXIOM_GIT_SHA: ${AXIOM_GIT_SHA:-}
+      POWERBI_TENANT_ID: ${POWERBI_TENANT_ID:-}
+      POWERBI_CLIENT_ID: ${POWERBI_CLIENT_ID:-}
+      POWERBI_CLIENT_SECRET: ${POWERBI_CLIENT_SECRET:-}
+      POWERBI_CERTIFICATE_PATH: ${POWERBI_CERTIFICATE_PATH:-}
+      POWERBI_CERTIFICATE_THUMBPRINT: ${POWERBI_CERTIFICATE_THUMBPRINT:-}
+      DATABASE_URL: postgresql://axiom_app:${APP_DB_PASSWORD}@postgres:5432/axiom
+      JOB_DATABASE_URL: postgresql://axiom_jobs:${JOB_DB_PASSWORD}@postgres:5432/axiom
+      DATABASE_ADMIN_URL: ""
+      AXIOM_STORAGE_DIR: /app/.data
+      PYTHON_BIN: /opt/venv/bin/python
+    command: ["npx", "tsx", "scripts/worker.ts"]
+    volumes: ["artifacts:/app/.data"]
+    depends_on:
+      init: { condition: service_completed_successfully }
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME: http://localhost:8081
+      KC_HTTP_ENABLED: "true"
+    ports: ["127.0.0.1:8081:8080"]
+    volumes:
+      [
+        "./keycloak/axiom-realm.json:/opt/keycloak/data/import/axiom-realm.json:ro",
+        "identity:/opt/keycloak/data",
+      ]
+volumes:
+  postgres:
+  artifacts:
+  identity:

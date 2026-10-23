@@ -1,0 +1,1 @@
+{"realm":"axiom","enabled":true,"registrationAllowed":false,"clients":[{"clientId":"axiom","enabled":true,"publicClient":true,"standardFlowEnabled":true,"directAccessGrantsEnabled":false,"redirectUris":["http://localhost:3000/api/auth/callback"],"webOrigins":["http://localhost:3000"],"attributes":{"pkce.code.challenge.method":"S256"}}]}

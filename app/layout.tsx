@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { WorkspaceProvider } from "@/components/workspace-provider";
-import { SiteHeader, SiteFooter } from "@/components/site-shell";
+import { PublicChrome } from "@/components/public-chrome";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "Axiom — Intelligence, under control.",
+    default: "Axiom Intelligence OS — Evidence in every decision.",
     template: "%s — Axiom",
   },
   description:
-    "A premium enterprise AI operations template. Orchestrate agent networks, observe model performance, and build with confidence.",
+    "An AI analytics workspace with versioned data, reproducible analysis, evaluation benchmarks, and Power BI integration.",
   robots: { index: false, follow: false },
   icons: { icon: "/favicon.svg" },
 };
@@ -30,11 +30,7 @@ export default function RootLayout({
       </head>
       <body>
         <WorkspaceProvider>
-          <SiteHeader />
-          <main id="main-content" tabIndex={-1}>
-            {children}
-          </main>
-          <SiteFooter />
+          <PublicChrome>{children}</PublicChrome>
         </WorkspaceProvider>
       </body>
     </html>

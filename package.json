@@ -1,27 +1,57 @@
 {
-  "name": "axiom-enterprise-ai-template",
-  "version": "1.0.0",
+  "name": "axiom-intelligence-os",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "next build",
+    "build": "next build && node scripts/prepare-standalone.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "start": "node --env-file-if-exists=.env scripts/start.mjs",
+    "setup": "node scripts/bootstrap.mjs",
+    "db:migrate": "node --env-file=.env --import tsx scripts/migrate.ts",
+    "db:seed": "node --env-file=.env --import tsx scripts/seed.ts",
+    "facts:import": "node --env-file=.env --import tsx scripts/facts-import.ts",
+    "test:smoke": "node scripts/smoke.mjs",
+    "worker": "node --env-file=.env --import tsx scripts/worker.ts",
+    "test:integration": "node --env-file=.env --import tsx --test tests/integration/*.test.ts",
+    "test:e2e": "playwright test",
+    "member:add": "node --env-file=.env --import tsx scripts/member.ts",
+    "powerbi:configure": "node --env-file=.env --import tsx scripts/powerbi-config.ts",
+    "powerbi:export": "node --import tsx scripts/powerbi-export.ts",
+    "test:python": "node --env-file-if-exists=.env scripts/test-python.mjs"
   },
   "dependencies": {
+    "@azure/msal-node": "7.1.1",
+    "framer-motion": "^12.23.0",
+    "lucide-react": "^0.468.0",
     "next": "^15.5.14",
+    "openai": "6.49.0",
+    "openid-client": "6.8.8",
+    "pg": "8.23.1",
+    "pg-boss": "10.4.2",
+    "pgsql-ast-parser": "12.0.2",
+    "powerbi-client": "2.25.0",
+    "powerbi-client-react": "2.0.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "framer-motion": "^12.23.0",
-    "lucide-react": "^0.468.0"
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "^4.1.0",
-    "tailwindcss": "^4.1.0",
-    "typescript": "^5.8.0",
     "@types/node": "^22.15.0",
+    "@types/pg": "8.23.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "tsx": "^4.20.0"
+    "axe-core": "4.14.0",
+    "prettier": "3.9.10",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
+  },
+  "type": "module",
+  "overrides": {
+    "postcss": "8.5.31"
   }
 }

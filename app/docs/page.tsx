@@ -1,256 +1,213 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowUpRight,
-  Workflow,
+  Database,
+  Sparkles,
+  BarChart3,
   Activity,
-  Terminal,
-  Calculator,
 } from "lucide-react";
-export const metadata: Metadata = { title: "Documentation" };
-const routeCards = [
+export const metadata = { title: "Intelligence OS documentation" };
+const cards = [
   {
-    href: "/observability/",
+    href: "/app/",
+    icon: BarChart3,
+    title: "Executive intelligence",
+    copy: "Defined KPIs, period comparisons, segment filters, and inspectable provenance.",
+  },
+  {
+    href: "/app/atlas/datasets/",
+    icon: Database,
+    title: "Data workbench",
+    copy: "Import, profile, review transformations, and publish immutable dataset versions.",
+  },
+  {
+    href: "/app/atlas/analyst/",
+    icon: Sparkles,
+    title: "Grounded analysis",
+    copy: "Ask catalog questions and inspect the calculated facts, queries, and limitations.",
+  },
+  {
+    href: "/app/atlas/evaluations/",
     icon: Activity,
-    title: "Observe your systems",
-    copy: "Inspect multi-series telemetry, token throughput, and model drift.",
-  },
-  {
-    href: "/workflows/",
-    icon: Workflow,
-    title: "Build an agent network",
-    copy: "Compose a workflow, connect nodes, configure behaviors, and simulate a run.",
-  },
-  {
-    href: "/developers/",
-    icon: Terminal,
-    title: "Explore the developer API",
-    copy: "Switch languages, inspect requests, and manage demo API keys.",
-  },
-  {
-    href: "/pricing/#roi",
-    icon: Calculator,
-    title: "Model the business case",
-    copy: "Compare plans and calculate infrastructure economics from explicit assumptions.",
+    title: "Evaluation center",
+    copy: "Inspect 32 reproducible cases and compare observed results against independent expectations.",
   },
 ];
-export default function DocumentationPage() {
+export default function Docs() {
   return (
     <div className="docs-page page-container">
       <p className="eyebrow">
-        <span /> AXIOM DOCUMENTATION
+        <span />
+        AXIOM INTELLIGENCE OS · ENGINEERING GUIDE
       </p>
       <h1>
-        From first connection
+        From a question
         <br />
-        <span className="muted">to full orchestration.</span>
+        <span className="muted">to defensible evidence.</span>
       </h1>
       <p className="docs-intro">
-        A considered foundation for enterprise AI. Explore the platform,
-        understand the architecture, and make every component your own.
+        A server-backed analytics foundation with versioned data, reproducible
+        methods, authorized workspaces, and Power BI integration.
       </p>
       <div className="docs-layout">
         <nav className="docs-sidebar" aria-label="Documentation sections">
           <a href="#quickstart">Quick start</a>
           <a href="#platform-guide">Platform guide</a>
-          <a href="#configuration">Configuration</a>
-          <a href="#production">Production architecture</a>
-          <a href="#quality">Quality & accessibility</a>
-          <a href="#delivery">Source & deployment</a>
+          <a href="#configuration">Connected services</a>
+          <a href="#production">Architecture</a>
+          <a href="#quality">Verification</a>
+          <a href="#delivery">Engineering handoff</a>
         </nav>
         <div className="docs-content">
           <section id="quickstart">
-            <p className="eyebrow">01 / GET STARTED</p>
-            <h2>Your control plane, in minutes.</h2>
+            <p className="eyebrow">01 / RUN THE REFERENCE</p>
+            <h2>A complete local workspace.</h2>
             <p>
-              The source package uses React 19, Next.js 15 App Router, Tailwind
-              CSS 4, TypeScript, and Framer Motion. Install the locked
-              dependencies, then launch the development server.
+              Use Node.js 22 LTS and Docker Compose v2. The first startup
+              applies migrations and seeds 249,150 facts across three isolated
+              workspaces and 36 months.
             </p>
             <pre>
               <code>
                 {
-                  "npm ci\nnpm run dev\n\n# Validate and export all pages\nnpm run typecheck\nnpm test\nnpm run build"
+                  "npm ci\nnpm run setup\ndocker compose up --build -d\n\n# Open http://localhost:3000/login/"
                 }
               </code>
             </pre>
             <div className="docs-note">
               <p>
-                This is an interactive template. Telemetry, keys, customer
-                scenarios, and execution results are illustrative. Leads stay in
-                the current session; workflows and demo keys can be saved in
-                your browser.
+                The local demo sign-in creates real server sessions. Ingestion,
+                calculations, permissions, and background jobs are real. The
+                deterministic analyst and local report preview are clearly
+                labeled. Disable local demo sign-in before customer-facing
+                deployment.
               </p>
             </div>
           </section>
           <section id="platform-guide">
-            <p className="eyebrow">02 / EXPLORE THE PLATFORM</p>
-            <h2>One ecosystem. Four entry points.</h2>
+            <p className="eyebrow">02 / EXPLORE THE WORKSPACE</p>
+            <h2>Connect every part of the decision.</h2>
             <div className="docs-cards">
-              {routeCards.map(({ href, icon: Icon, title, copy }) => (
-                <Link className="docs-card" href={href} key={href}>
+              {cards.map(({ href, icon: Icon, title, copy }) => (
+                <Link className="docs-card" key={href} href={href}>
                   <Icon size={22} />
                   <h3>{title}</h3>
                   <p>{copy}</p>
                   <span>
-                    Open workspace <ArrowUpRight size={13} />
+                    Open workspace
+                    <ArrowUpRight size={13} />
                   </span>
                 </Link>
               ))}
             </div>
-            <h3>Designed around your next action</h3>
             <p>
-              Begin with a cost model or explore the console directly. Switch
-              between Atlas and Helix workspaces to see browser-local tenant
-              partitioning. Select a workflow node to configure it, create
-              connections using the controls, and inspect a simulated run before
-              saving.
+              Import CSV, XLSX, JSON, or Parquet, review its profile, preview a
+              cleaning recipe and publish a new version. In the Analyst, select
+              that version and ask for supported aggregates. The Analysis Lab
+              provides cohort, forecast, anomaly, comparison and scenario
+              methods over the reference SaaS fact model.
             </p>
           </section>
           <section id="configuration">
-            <p className="eyebrow">03 / MAKE IT YOURS</p>
-            <h2>Small configuration. Broad control.</h2>
+            <p className="eyebrow">03 / CONNECT YOUR SERVICES</p>
+            <h2>Explicit configuration. Honest states.</h2>
             <p>
-              Brand and navigation live in <code>lib/config.ts</code>. The CSS
-              theme in <code>app/globals.css</code> defines the shared visual
-              language. Each operational module owns its component styles and
-              behavior.
+              OpenAI requires a server-only key and an explicitly selected
+              structured-output-compatible model. Power BI requires Microsoft
+              Entra service credentials, an approved customer profile/workspace,
+              report/model mappings, effective RLS identities and eligible
+              capacity.
             </p>
             <pre>
-              <code>{`export const siteConfig = {\n  name: 'Axiom',\n  description: 'The control plane for intelligent systems.',\n  demoMode: true,\n  navigation: [/* typed route definitions */],\n} as const;\n\n// Tenant IDs are presentation context in this template.\n// Authorize every real operation on your server.\ntype TenantId = 'atlas' | 'helix';`}</code>
+              <code>
+                {
+                  "AXIOM_MODE=connected\nAXIOM_DEMO_LOGIN=false\nOPENAI_MODEL=YOUR_APPROVED_MODEL\n# Keep credentials in server secrets, never NEXT_PUBLIC_* variables."
+                }
+              </code>
             </pre>
-            <div className="table-wrap">
-              <table>
-                <caption className="sr-only">
-                  Template module integration guide
-                </caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Module</th>
-                    <th scope="col">Configuration point</th>
-                    <th scope="col">Production integration</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Workspace</td>
-                    <td>
-                      <code>workspace-provider.tsx</code>
-                    </td>
-                    <td>Identity provider + authorized membership</td>
-                  </tr>
-                  <tr>
-                    <td>Telemetry</td>
-                    <td>
-                      <code>observability.tsx</code>
-                    </td>
-                    <td>Metrics API + streaming transport</td>
-                  </tr>
-                  <tr>
-                    <td>Execution</td>
-                    <td>
-                      <code>lib/workflow.ts</code>
-                    </td>
-                    <td>Authenticated workflow store + executor</td>
-                  </tr>
-                  <tr>
-                    <td>Cost model</td>
-                    <td>
-                      <code>lib/roi.ts</code>
-                    </td>
-                    <td>Your verified rates and billing rules</td>
-                  </tr>
-                  <tr>
-                    <td>Conversion</td>
-                    <td>
-                      <code>lead-dialog.tsx</code>
-                    </td>
-                    <td>Validated server endpoint + CRM delivery</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <p>
+              Connected failures return unavailable/error states. No sample
+              answer or report is substituted. Operational SaaS dashboards
+              require a configured fact-source adapter in connected mode;
+              arbitrary uploaded files remain queryable through their own
+              catalog.
+            </p>
           </section>
           <section id="production">
-            <p className="eyebrow">04 / PRODUCTION ARCHITECTURE</p>
-            <h2>A foundation you can build on.</h2>
-            <p>
-              The shipped application is a static frontend. Real tenant
-              isolation belongs on the server and in the database. A selected
-              workspace, a URL parameter, or a browser storage key must never
-              grant access.
-            </p>
+            <p className="eyebrow">04 / SECURITY BOUNDARIES</p>
+            <h2>Authorization lives on the server.</h2>
             <ol>
-              <li>Authenticate the user with your identity provider.</li>
               <li>
-                Resolve and authorize their membership in the requested tenant.
+                OIDC proves identity; database membership grants workspace
+                access.
               </li>
               <li>
-                Scope every query, cache key, object path, and event to that
-                authorized tenant.
+                Every database transaction resolves the actual membership and
+                applies forced row-level security.
               </li>
               <li>
-                Enforce permissions for API key issuance, workflow execution,
-                billing, and exports.
+                The model selects an approved plan; the server compiles and
+                validates the query.
               </li>
               <li>
-                Store secret credentials server-side; persist key hashes and
-                return new keys once.
+                Fixed Python tools process files and statistics with bounded
+                execution. Uploaded content never becomes code.
               </li>
               <li>
-                Emit an audit event for sensitive actions and validate each
-                workflow before execution.
+                Power BI IDs and effective identities come from a trusted server
+                mapping. Browser filters do not replace RLS.
+              </li>
+              <li>
+                Exports, jobs and saved analyses retain authorization and
+                source-version metadata.
               </li>
             </ol>
-            <pre>
-              <code>{`// Server integration contract — implement with your auth stack.\ninterface AuthorizedWorkspace {\n  userId: string;\n  tenantId: string;\n  role: 'owner' | 'admin' | 'developer' | 'viewer';\n}\n\ninterface TelemetryQuery {\n  from: string;\n  to: string;\n  resolution: 'minute' | 'hour' | 'day';\n}\n\n// Never trust a tenantId supplied by the browser on its own.\nconst workspace = await authorizeWorkspace(session, tenantSlug);\nreturn metrics.list(workspace.tenantId, validatedQuery);`}</code>
-            </pre>
             <p>
-              The developer kit includes a database boundary sketch, row-level
-              security guidance, event shapes, migration steps, and backend
-              adapter examples in <code>docs/ARCHITECTURE.md</code>.
+              Public template routes remain demonstrations. The protected
+              application uses the new server architecture; browser-local
+              template workspace switching never grants application membership.
             </p>
           </section>
           <section id="quality">
-            <p className="eyebrow">05 / QUALITY BY DESIGN</p>
-            <h2>Clarity is a feature.</h2>
+            <p className="eyebrow">05 / VERIFY THE EVIDENCE</p>
+            <h2>Measure the whole system.</h2>
+            <pre>
+              <code>
+                {
+                  "npm run typecheck\nnpm test\nnpm run test:integration\nnpm run test:e2e\nnpm run build"
+                }
+              </code>
+            </pre>
             <p>
-              The template includes semantic headings, visible focus, native
-              dialogs, keyboard alternatives to dragging, explicit form labels,
-              reduced-motion support, and table alternatives to visual data.
-              Before launch, complete a screen-reader and keyboard audit with
-              your final content.
-            </p>
-            <h3>Performance is a measured outcome.</h3>
-            <p>
-              Server-rendered routes, a local variable font, reserved chart
-              dimensions, deferred browser interactions, and a lightweight
-              canvas keep the foundation lean. A sub-500ms load is an
-              aspirational budget that depends on hosting, network, device, and
-              added integrations. It is not a measured guarantee.
-            </p>
-            <p>
-              Use <code>docs/ACCESSIBILITY.md</code> and{" "}
-              <code>docs/PERFORMANCE.md</code> as release checklists. Real-user
-              monitoring and assistive technology checks belong in the final
-              deployment.
+              Benchmark scores disclose missing evidence. A deterministic run
+              tests the pipeline and cannot establish LLM capability. Automated
+              accessibility checks complement manual keyboard, screen-reader and
+              device testing; they are not certification.
             </p>
           </section>
           <section id="delivery">
-            <p className="eyebrow">06 / THE DEVELOPER KIT</p>
-            <h2>Everything has a place.</h2>
-            <pre>
-              <code>{`app/           Routes, metadata, shared theme\ncomponents/    Composable product UI and client interactions\nlib/           Configuration, workflow logic, ROI calculations\npublic/        Self-hosted visual assets\ntests/         Business logic and graph validation tests\ndocs/          Blueprints, onboarding, integration and QA guides\nout/           Generated static website after npm run build`}</code>
-            </pre>
+            <p className="eyebrow">06 / ENGINEERING HANDOFF</p>
+            <h2>Everything an engineer needs to begin.</h2>
             <p>
-              Deploy the generated <code>out/</code> directory to a static host
-              with directory index support. For server routes, authentication,
-              or database access, remove <code>output: 'export'</code> from
-              Next.js configuration and deploy to a supported server runtime.
+              The repository includes migrations, seed data, typed API
+              contracts, Docker setup, statistical methods, evaluation fixtures,
+              Power BI model/DAX instructions and an explicit feature-status
+              matrix.
             </p>
-            <Link className="button button-secondary" href="/">
-              Back to the platform <ArrowUpRight size={14} />
-            </Link>
+            <a
+              className="button button-primary"
+              href="https://github.com/atifmahmoodai/axiom-enterprise-ai-template"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open source repository
+              <ArrowUpRight size={15} />
+            </a>
+            <p>
+              Intelligence OS requires a server, worker, PostgreSQL and
+              persistent artifact storage. The existing Sites preview remains
+              the original static template.
+            </p>
           </section>
         </div>
       </div>
