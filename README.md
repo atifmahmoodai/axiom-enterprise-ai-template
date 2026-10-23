@@ -61,7 +61,7 @@ See [Validation](docs/VALIDATION.md) for actual checks and limitations. A determ
 
 ## Engineering handoff
 
-[Download the Intelligence OS v2 guide (PDF)](docs/axiom-intelligence-os-guide.pdf). Its reproducible source is `scripts/build-guide.py`; optional document dependencies are in `docs/requirements-guide.txt`.
+[Download the Intelligence OS v2 guide (PDF)](docs/axiom-intelligence-os-guide.pdf?raw=1). This opens the PDF directly, bypassing GitHub's file preview. Its reproducible source is `scripts/build-guide.py`; optional document dependencies are in `docs/requirements-guide.txt`.
 
 - [Onboarding and identity setup](docs/ONBOARDING.md)
 - [Connected data sources and snapshot provisioning](docs/DATA-SOURCES.md)
@@ -72,6 +72,6 @@ See [Validation](docs/VALIDATION.md) for actual checks and limitations. A determ
 - [Benchmark definitions and scoring](docs/BENCHMARKS.md)
 - [Product layouts and journeys](docs/BLUEPRINT.md)
 - [Performance](docs/PERFORMANCE.md) and [accessibility](docs/ACCESSIBILITY.md)
-- [Original template guide, v1 PDF](docs/axiom-product-and-engineering-guide.pdf): historical frontend edition; this README and v2 documentation describe Intelligence OS.
+- [Original template guide, v1 PDF](docs/axiom-product-and-engineering-guide.pdf?raw=1): historical frontend edition; this README and v2 documentation describe Intelligence OS.
 
 The existing private Sites preview represents the original static template. Intelligence OS requires the supplied server/worker/database deployment; static hosting cannot execute its backend.
