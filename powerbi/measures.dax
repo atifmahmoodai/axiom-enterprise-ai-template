@@ -1,0 +1,34 @@
+// Create explicit measures in the semantic model; money columns are decimal USD.
+Billed Revenue = SUM(Fact_invoice[Amount])
+Infrastructure Spend = SUM(Fact_infrastructure[Cost])
+Processed Tokens = SUM(Fact_usage[Quantity])
+Infrastructure Adjusted Margin = DIVIDE([Billed Revenue] - [Infrastructure Spend], [Billed Revenue])
+
+MRR =
+VAR ClosingDate = MAX(Fact_subscription[Date])
+RETURN CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = ClosingDate)
+
+Active Customers =
+VAR ClosingDate = MAX(Fact_subscription[Date])
+RETURN CALCULATE(DISTINCTCOUNT(Fact_subscription[CustomerId]), REMOVEFILTERS('Date'), Fact_subscription[Date] = ClosingDate, Fact_subscription[MRR] > 0)
+
+Logo Retention =
+VAR OpeningDate = MIN(Fact_subscription[Date])
+VAR ClosingDate = MAX(Fact_subscription[Date])
+VAR Cohort = FILTER(ADDCOLUMNS(VALUES(Customer[CustomerId]), "Opening", CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = OpeningDate)), [Opening] > 0)
+VAR Retained = FILTER(Cohort, CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = ClosingDate) > 0)
+RETURN DIVIDE(COUNTROWS(Retained), COUNTROWS(Cohort))
+
+Net Revenue Retention =
+VAR OpeningDate = MIN(Fact_subscription[Date])
+VAR ClosingDate = MAX(Fact_subscription[Date])
+VAR Cohort = FILTER(ADDCOLUMNS(VALUES(Customer[CustomerId]), "Opening", CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = OpeningDate)), [Opening] > 0)
+VAR ClosingMRR = SUMX(Cohort, CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = ClosingDate))
+RETURN DIVIDE(ClosingMRR, SUMX(Cohort, [Opening]))
+
+Gross Revenue Retention =
+VAR OpeningDate = MIN(Fact_subscription[Date])
+VAR ClosingDate = MAX(Fact_subscription[Date])
+VAR Cohort = FILTER(ADDCOLUMNS(VALUES(Customer[CustomerId]), "Opening", CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = OpeningDate)), [Opening] > 0)
+VAR CappedMRR = SUMX(Cohort, MIN([Opening], CALCULATE(SUM(Fact_subscription[MRR]), REMOVEFILTERS('Date'), Fact_subscription[Date] = ClosingDate)))
+RETURN DIVIDE(CappedMRR, SUMX(Cohort, [Opening]))

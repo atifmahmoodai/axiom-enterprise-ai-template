@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-23",
+  "implementationCommit": "9adf01a3a92827b0235f0d641c7ae72378fb234c",
+  "environment": {
+    "nativeNode": "24.19.0",
+    "nativePython": "3.12.14",
+    "containerNode": "22",
+    "containerPython": "3.11",
+    "postgres": "16",
+    "browser": "system Chromium via Playwright 1.64.1",
+    "hostVcpuApproximate": 3,
+    "hostRamGiBApproximate": 10,
+    "network": "loopback, no network throttling; concurrent Docker build during browser checks"
+  },
+  "results": {
+    "typescript": "passed",
+    "productionBuild": "passed",
+    "unit": {
+      "passed": 23,
+      "failed": 0
+    },
+    "python": {
+      "passed": 8,
+      "failed": 0,
+      "alsoPassedInWorkerContainer": true
+    },
+    "integration": {
+      "passed": 21,
+      "failed": 0
+    },
+    "browser": {
+      "passed": 5,
+      "failed": 0,
+      "durationApproximateSeconds": 60
+    },
+    "deterministicBenchmarks": {
+      "passed": 32,
+      "weightedScore": null,
+      "status": "incomplete",
+      "reason": "Demo pipeline baseline has no paid-model cost evidence."
+    },
+    "automatedAccessibility": {
+      "workspaceRoutes": 8,
+      "violations": 0,
+      "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
+    },
+    "responsiveOverflow": {
+      "widthsCssPx": [320, 1440, 3840],
+      "overflowDetected": false
+    },
+    "keycloakOidc": "passed real PKCE callback, no automatic membership, explicit grant",
+    "dockerFreshSmoke": "passed migrations, seed, nonroot runtime, no web admin credentials, shared volume ingestion and computed sum30",
+    "productionDependencyAudit": {
+      "vulnerabilities": 0
+    },
+    "operatorCli": "passed membership/configuration audit and concurrent cross-tenant Power BI profile reuse denial"
+  },
+  "performance": {
+    "warmDashboardConcurrentServiceMilliseconds": [36, 36, 50, 50, 101],
+    "isHttpOrPageLoadMeasurement": false
+  },
+  "unverified": [
+    "live OpenAI model benchmark and price accounting",
+    "Microsoft capacity, embedding, RLS outcomes, token renewal, exports and refresh completion",
+    "production load, manual accessibility certification, field Core Web Vitals"
+  ]
+}

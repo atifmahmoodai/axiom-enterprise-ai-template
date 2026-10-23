@@ -1,0 +1,10 @@
+.git
+.env*
+.venv
+.next
+.data
+.runtime
+node_modules
+test-results
+playwright-report
+docs/assets
